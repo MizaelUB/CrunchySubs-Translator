@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "CrunchySubs-Translator & Tools",
+  "version": "1.2.0",
+  "description": "Añade subtítulos traducidos a Crunchyroll. Permite elegir el idioma de origen y destino en tiempo real o cargar archivos propios.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.crunchyroll.com/*",
+    "https://translate.googleapis.com/*",
+    "https://translate.google.com/*",
+    "https://clients5.google.com/*",
+    "http://localhost:3000/*"
+  ],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "action": {
+    "default_popup": "popup/index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.crunchyroll.com/*"],
+      "js": ["scripts/inject.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["*://*.crunchyroll.com/*"],
+      "css": ["styles/content.css"],
+      "js": ["scripts/content.js"],
+      "run_at": "document_start",
+      "world": "ISOLATED"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["scripts/inject.js"],
+      "matches": ["*://*.crunchyroll.com/*"]
+    }
+  ]
+}

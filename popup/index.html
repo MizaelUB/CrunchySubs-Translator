@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CrunchySubs-Translator &amp; Tools</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <header class="bar">
+      <div class="brand">
+        <svg class="mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="url(#g0)" stroke-width="2"/>
+          <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="url(#g1)" stroke-width="2"/>
+          <defs>
+            <linearGradient id="g0" x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#F47521"/><stop offset="1" stop-color="#FFB347"/>
+            </linearGradient>
+            <linearGradient id="g1" x1="9" y1="9" x2="15" y2="15" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#F47521"/><stop offset="1" stop-color="#FFB347"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="brand-text">
+          <h1>CrunchySubs-Translator &amp; Tools</h1>
+          <span class="status-pill" id="status-pill"><span class="dot"></span><span id="status-text">Activo</span></span>
+        </div>
+      </div>
+      <label class="switch" title="Activar / desactivar subtítulos">
+        <input type="checkbox" id="master-toggle" checked>
+        <span class="track"><span class="thumb"></span></span>
+      </label>
+    </header>
+
+    <main class="panel" id="panel">
+      <section class="card">
+        <div class="card-head">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H21V19H3V5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M12 5V19" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 10L9 12L7 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h2>Modo de subtítulos</h2>
+        </div>
+        <div class="segmented" role="tablist">
+          <input type="radio" name="subMode" value="original" id="mode-original">
+          <label for="mode-original" class="seg">Sin traducir</label>
+          <input type="radio" name="subMode" value="auto" id="mode-auto" checked>
+          <label for="mode-auto" class="seg">Traducir</label>
+          <input type="radio" name="subMode" value="local" id="mode-local">
+          <label for="mode-local" class="seg">Archivo local</label>
+        </div>
+        <p class="hint" id="mode-hint">Selecciona los idiomas de origen y destino para traducir en tiempo real.</p>
+      </section>
+
+      <section class="card" id="language-section">
+        <div class="card-head">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M3 12H21M12 3C14.5 5.4 15.8 8.4 15.8 12C15.8 15.6 14.5 18.6 12 21C9.5 18.6 8.2 15.6 8.2 12C8.2 8.4 9.5 5.4 12 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h2 id="language-title">Idiomas de traducción</h2>
+        </div>
+        <div class="control">
+          <label class="control-label" for="source-lang" id="source-lang-label">Subtítulo de origen</label>
+          <select id="source-lang" class="select">
+            <option value="" disabled selected>Cargando idiomas disponibles...</option>
+          </select>
+        </div>
+        <div class="control" id="target-lang-control">
+          <label class="control-label" for="target-lang">Traducir a</label>
+          <select id="target-lang" class="select"></select>
+        </div>
+        <p class="hint" id="language-hint">Los idiomas disponibles se actualizan con cada episodio.</p>
+      </section>
+
+      <section class="card hidden" id="local-file-section">
+        <div class="upload" id="drop-zone">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p>Arrastra tu archivo .srt o .vtt</p>
+          <input type="file" id="file-upload" accept=".srt,.vtt" hidden>
+          <button class="btn" id="btn-browse">Explorar</button>
+        </div>
+        <p class="file-status" id="file-status">Ningún archivo seleccionado</p>
+      </section>
+
+      <section class="card" id="sync-section">
+        <div class="card-head">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 7V12L15.5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h2>Sincronización</h2>
+        </div>
+
+        <div class="control">
+          <div class="control-head">
+            <span class="control-label">Desfase de subtítulos</span>
+            <span class="control-value" id="sync-value">0 s</span>
+          </div>
+          <div class="sync-grid">
+            <button class="btn ghost compact" id="sync-minus-coarse" title="Retrasar los subtítulos 1 segundo">-1 s</button>
+            <button class="btn ghost compact" id="sync-minus-fine" title="Retrasar los subtítulos 0,1 segundos">-0,1 s</button>
+            <button class="btn ghost compact" id="sync-plus-fine" title="Adelantar los subtítulos 0,1 segundos">+0,1 s</button>
+            <button class="btn ghost compact" id="sync-plus-coarse" title="Adelantar los subtítulos 1 segundo">+1 s</button>
+          </div>
+          <p class="hint control-hint">Ajusta si los subtítulos van adelantados o retrasados: los valores positivos los adelantan y los negativos los retrasan. Con el vídeo en marcha también puedes usar los atajos <b>,</b> y <b>.</b> (con <b>Shift</b>, ±1 s).</p>
+        </div>
+
+        <div class="row">
+          <label for="sync-offset">Valor exacto (s)</label>
+          <input type="number" id="sync-offset" value="0" step="0.1" class="num">
+        </div>
+        <button class="btn ghost compact" id="btn-sync-reset">Restablecer desfase</button>
+        <p class="hint">Se guarda por idioma de origen o por archivo local.</p>
+      </section>
+
+      <section class="card" id="styles-section">
+        <div class="card-head">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M2 12H22" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <h2>Personalización visual</h2>
+        </div>
+
+        <div class="control original-style-control">
+          <div class="control-head">
+            <span class="control-label">Carteles y diálogos se renderizan por separado</span>
+          </div>
+          <p class="hint control-hint">Los carteles siempre respetan posición, color y fuente del ASS. Los diálogos usan tu estilo personalizado.</p>
+        </div>
+
+        <div class="control nested-card">
+          <div class="control-head">
+            <span class="control-label">Tamaño de carteles</span>
+            <span class="control-value" id="sign-size-val">70%</span>
+          </div>
+          <input type="range" id="sign-size-scale" class="slider" min="20" max="300" value="70" step="5">
+          <p class="hint control-hint">Multiplicador aplicado solo al texto de los carteles. Por defecto 70 % para que se vean más pequeños que el ASS original.</p>
+        </div>
+
+        <div class="control">
+          <span class="control-label">Fuente</span>
+          <select id="sub-font" class="select">
+            <option value='"Trebuchet MS", Arial, sans-serif'>Trebuchet MS (Default)</option>
+            <option value='Arial, sans-serif'>Arial</option>
+            <option value='"Inter", sans-serif'>Inter</option>
+            <option value='"Roboto", sans-serif'>Roboto</option>
+            <option value='"Courier New", monospace'>Consolas / Courier</option>
+          </select>
+        </div>
+
+        <div class="control two-col">
+          <div class="color-field">
+            <span class="control-label">Texto</span>
+            <label class="color-swatch">
+              <input type="color" id="sub-color" value="#ffffff">
+              <span class="swatch-chip" id="chip-color"></span>
+            </label>
+          </div>
+          <div class="color-field">
+            <span class="control-label">Fondo</span>
+            <label class="color-swatch">
+              <input type="color" id="sub-bg" value="#000000">
+              <span class="swatch-chip" id="chip-bg"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="control">
+          <div class="control-head">
+            <span class="control-label">Opacidad del fondo</span>
+            <span class="control-value" id="opacity-val">40%</span>
+          </div>
+          <input type="range" id="sub-bg-opacity" class="slider" min="0" max="100" value="40">
+        </div>
+
+        <div class="control">
+          <div class="control-head">
+            <span class="control-label">Borde / sombra</span>
+            <label class="mini-switch">
+              <input type="checkbox" id="sub-outline-enabled" checked>
+              <span class="mini-track"><span class="mini-thumb"></span></span>
+            </label>
+          </div>
+          <div class="color-swatch inline">
+            <input type="color" id="sub-outline" value="#000000">
+            <span class="swatch-chip sm" id="chip-outline"></span>
+            <span class="control-value" id="outline-color-text">#000000</span>
+          </div>
+        </div>
+
+        <div class="control">
+          <div class="control-head">
+            <span class="control-label">Grosor del borde</span>
+            <span class="control-value" id="outline-size-val">2px</span>
+          </div>
+          <input type="range" id="sub-outline-size" class="slider" min="0" max="5" value="2">
+        </div>
+
+        <div class="control">
+          <div class="control-head">
+            <span class="control-label">Tamaño de fuente</span>
+            <span class="control-value" id="font-size-val">100%</span>
+          </div>
+          <input type="range" id="sub-font-size" class="slider" min="50" max="200" value="100" step="5">
+        </div>
+
+        <div class="control">
+          <div class="control-head">
+            <span class="control-label">Posición vertical</span>
+            <span class="control-value" id="position-val">10%</span>
+          </div>
+          <input type="range" id="sub-position" class="slider" min="0" max="90" value="10">
+        </div>
+
+        <button class="btn ghost" id="btn-reset-styles">Restablecer predeterminados</button>
+      </section>
+    </main>
+
+    <div class="disabled-overlay" id="disabled-overlay">
+      <p>Subtítulos desactivados</p>
+      <span>Activa el interruptor para volver a inyectarlos.</span>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
